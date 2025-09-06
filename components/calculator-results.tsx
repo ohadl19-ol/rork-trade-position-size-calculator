@@ -10,18 +10,27 @@ export function CalculatorResults() {
     return null;
   }
 
-  const formatNumber = (num: number, decimals: number = 2): string => {
+  const formatNumber = (num: number | null | undefined, decimals: number = 2): string => {
+    if (num === null || num === undefined || isNaN(num)) {
+      return 'N/A';
+    }
     return num.toLocaleString('en-US', {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
     });
   };
 
-  const formatCurrency = (num: number): string => {
+  const formatCurrency = (num: number | null | undefined): string => {
+    if (num === null || num === undefined || isNaN(num)) {
+      return 'N/A';
+    }
     return `${formatNumber(num, 2)}`;
   };
 
-  const formatShares = (num: number): string => {
+  const formatShares = (num: number | null | undefined): string => {
+    if (num === null || num === undefined || isNaN(num)) {
+      return 'N/A';
+    }
     // Show up to 4 decimal places for shares, but remove trailing zeros
     return parseFloat(num.toFixed(4)).toLocaleString('en-US');
   };
@@ -94,7 +103,11 @@ export function CalculatorResults() {
             Risk per share: {formatCurrency(results.riskPerShare)}
           </Text>
           <Text style={styles.infoText}>
-            Total risk: {formatCurrency(parseFloat((results.sharesToBuy * results.riskPerShare).toFixed(2)))}
+            Total risk: {formatCurrency(
+              results.sharesToBuy && results.riskPerShare 
+                ? parseFloat((results.sharesToBuy * results.riskPerShare).toFixed(2))
+                : null
+            )}
           </Text>
         </View>
 
