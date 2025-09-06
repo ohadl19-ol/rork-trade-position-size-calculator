@@ -119,8 +119,14 @@ export default function HistoryScreen() {
         </Text>
         {item.positionPercentage && (
           <Text style={styles.summaryText}>
-            <Text style={styles.summaryLabel}>Account %: </Text>
+            <Text style={styles.summaryLabel}>Position %: </Text>
             {formatNumber(item.positionPercentage)}%
+          </Text>
+        )}
+        {item.riskPercent && (
+          <Text style={styles.summaryText}>
+            <Text style={styles.summaryLabel}>Risk %: </Text>
+            {formatNumber(item.riskPercent, 2)}%
           </Text>
         )}
       </View>
@@ -251,8 +257,14 @@ export default function HistoryScreen() {
                   </View>
                   {selectedRecord.positionPercentage && (
                     <View style={styles.detailRow}>
-                      <Text style={styles.detailLabel}>% of Account:</Text>
+                      <Text style={styles.detailLabel}>Position % of Account:</Text>
                       <Text style={styles.detailValue}>{formatNumber(selectedRecord.positionPercentage)}%</Text>
+                    </View>
+                  )}
+                  {selectedRecord.riskPercent && (
+                    <View style={styles.detailRow}>
+                      <Text style={styles.detailLabel}>Risk % of Account:</Text>
+                      <Text style={styles.detailValue}>{formatNumber(selectedRecord.riskPercent, 2)}%</Text>
                     </View>
                   )}
                   {selectedRecord.riskRewardRatio && (

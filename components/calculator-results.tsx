@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { TrendingUp, DollarSign, Percent, Target, Save } from 'lucide-react-native';
+import { TrendingUp, DollarSign, Percent, Target, Save, AlertTriangle } from 'lucide-react-native';
 import { useCalculator } from '@/providers/calculator-provider';
 
 export function CalculatorResults() {
@@ -60,6 +60,21 @@ export function CalculatorResults() {
               <Text style={styles.resultSubtext}>of account balance</Text>
             </View>
           )}
+
+          <View style={styles.resultItem}>
+            <View style={styles.resultHeader}>
+              <AlertTriangle size={20} color="#dc2626" />
+              <Text style={styles.resultLabel}>Risk % of Account</Text>
+            </View>
+            {results.riskPercent !== null ? (
+              <Text style={styles.resultValue}>{formatNumber(results.riskPercent, 2)}%</Text>
+            ) : (
+              <Text style={styles.resultValueNA}>N/A</Text>
+            )}
+            <Text style={styles.resultSubtext}>
+              {results.riskPercent !== null ? 'of account balance' : 'enter account balance'}
+            </Text>
+          </View>
 
           {results.riskRewardRatio !== null && (
             <View style={styles.resultItem}>
@@ -178,5 +193,11 @@ const styles = StyleSheet.create({
     color: '#059669',
     marginLeft: 6,
     fontStyle: 'italic',
+  },
+  resultValueNA: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#94a3b8',
+    marginBottom: 4,
   },
 });

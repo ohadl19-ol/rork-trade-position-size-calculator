@@ -17,6 +17,7 @@ export interface CalculationResults {
   positionPercentage: number | null;
   riskRewardRatio: number | null;
   riskPerShare: number;
+  riskPercent: number | null;
 }
 
 export interface HistoryRecord {
@@ -31,6 +32,7 @@ export interface HistoryRecord {
   positionSize: number;
   positionPercentage?: number;
   riskRewardRatio?: number;
+  riskPercent?: number;
   tradeDirection: 'long' | 'short';
 }
 
@@ -151,6 +153,14 @@ export const [CalculatorProvider, useCalculator] = createContextHook(() => {
       return 'Account balance must be a valid number greater than zero';
     }
 
+    // Check if risk amount exceeds account balance
+    if (inputs.accountBalance.trim()) {
+      const accountBalance = parseFloat(inputs.accountBalance);
+      if (riskAmount > accountBalance) {
+        return 'Risk amount exceeds account balance';
+      }
+    }
+
     if (inputs.targetPrice.trim() && (isNaN(parseFloat(inputs.targetPrice)) || parseFloat(inputs.targetPrice) <= 0)) {
       return 'Target price must be a valid number greater than zero';
     }
@@ -197,6 +207,7 @@ export const [CalculatorProvider, useCalculator] = createContextHook(() => {
     }
 
     const positionPercentage = accountBalance ? (totalPositionSize / accountBalance) * 100 : null;
+    const riskPercent = accountBalance ? (riskAmount / accountBalance) * 100 : null;
     
     // Determine trade direction
     const isLongPosition = entryPrice > stopLossPrice;
@@ -230,6 +241,7 @@ export const [CalculatorProvider, useCalculator] = createContextHook(() => {
       positionPercentage,
       riskRewardRatio,
       riskPerShare,
+      riskPercent,
     };
 
     setResults(calculationResults);
@@ -248,6 +260,7 @@ export const [CalculatorProvider, useCalculator] = createContextHook(() => {
       positionSize: totalPositionSize,
       positionPercentage: positionPercentage || undefined,
       riskRewardRatio: riskRewardRatio || undefined,
+      riskPercent: riskPercent || undefined,
       tradeDirection: isLongPosition ? 'long' : 'short',
     };
 
